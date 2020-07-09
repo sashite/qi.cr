@@ -11,20 +11,20 @@ describe Qi::Position do
     nil, nil, nil, nil, nil, nil, nil, nil, nil,
     "P", "P", "P", "P", "P", "P", "P", "P", "P",
     nil, "B", nil, nil, nil, nil, nil, "R", nil,
-    "L", "N", "S", "G", "K", "G", "S", "N", "L"
+    "L", "N", "S", "G", "K", "G", "S", "N", "L",
   ]
 
   starting_position =
     Qi::Position.new(squares)
 
   moves = [
-    [ 56, 47, "P" ],
-    [ 3, 11, "g" ],
-    [ 64, 24, "+B", "P" ],
-    [ 5, 14, "g" ],
-    [ 24, 14, "+B", "G" ],
-    [ 4, 3, "k" ],
-    [ nil, 13, "G" ]
+    [56, 47, "P"],
+    [3, 11, "g"],
+    [64, 24, "+B", "P"],
+    [5, 14, "g"],
+    [24, 14, "+B", "G"],
+    [4, 3, "k"],
+    [nil, 13, "G"],
   ]
 
   last_position =

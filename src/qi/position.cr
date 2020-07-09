@@ -19,9 +19,9 @@ module Qi
       actions = move.each_slice(4).to_a
 
       actions.each do |action|
-        src_square_id       = action[0].as(Int32?)
-        dst_square_id       = action[1].as(Int32)
-        moved_piece_name    = action[2].as(String)
+        src_square_id = action[0].as(Int32?)
+        dst_square_id = action[1].as(Int32)
+        moved_piece_name = action[2].as(String)
         captured_piece_name = action.fetch(3, nil).as(String?)
 
         if src_square_id.nil?
@@ -48,9 +48,9 @@ module Qi
       end
 
       self.class.new(updated_squares,
-        is_turn_to_topside:         !turn_to_topside?,
-        bottomside_in_hand_pieces:  updated_bottomside_in_hand_pieces,
-        topside_in_hand_pieces:     updated_topside_in_hand_pieces)
+        is_turn_to_topside: !turn_to_topside?,
+        bottomside_in_hand_pieces: updated_bottomside_in_hand_pieces,
+        topside_in_hand_pieces: updated_topside_in_hand_pieces)
     end
 
     def turn_to_topside?
