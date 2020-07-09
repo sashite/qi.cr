@@ -1,0 +1,9 @@
+name: qi
+version: 0.1.0
+
+authors:
+  - Cyril Kato <contact@cyril.email>
+
+crystal: 0.35.1
+
+license: MIT
