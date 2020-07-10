@@ -1,6 +1,6 @@
 # Qi
 
-[![Build Status](https://api.travis-ci.org/sashite/qi.rb.svg?branch=master)][travis]
+[![Build Status](https://travis-ci.org/sashite/qi.cr.svg?branch=master)](https://travis-ci.org/sashite/qi.cr)
 
 > Instantiate [Portable Chess Notation](https://developer.sashite.com/specs/portable-chess-notation)'s positions and apply [Portable Move Notation](https://developer.sashite.com/specs/portable-move-notation)'s moves.
 
@@ -74,5 +74,3 @@ This library is available as open source under the terms of the [MIT License](ht
 This library is maintained by [Sashite](https://sashite.com/).
 
 With some [lines of code](https://github.com/sashite/), let's share the beauty of Chinese, Japanese and Western cultures through the game of chess!
-
-[travis]: https://travis-ci.org/sashite/qi.cr
