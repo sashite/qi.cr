@@ -1,4 +1,4 @@
-# Qi
+# Qi.cr
 
 [![Build Status](https://travis-ci.org/sashite/qi.cr.svg?branch=master)](https://travis-ci.org/sashite/qi.cr)
 
