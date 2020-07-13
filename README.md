@@ -1,4 +1,4 @@
-# Qi.cr
+# 棋.cr
 
 [![Build Status](https://travis-ci.org/sashite/qi.cr.svg?branch=master)](https://travis-ci.org/sashite/qi.cr)
 
@@ -23,7 +23,7 @@ Let's replay [The Shortest Possible Game of Shogi](https://userpages.monmouth.co
 ```crystal
 require "qi"
 
-shogi_starting_position = Qi::Position.new([
+starting_position = Qi::Position.new([
   "l", "n", "s", "g", "k", "g", "s", "n", "l",
   nil, "r", nil, nil, nil, nil, nil, "b", nil,
   "p", "p", "p", "p", "p", "p", "p", "p", "p",
@@ -45,7 +45,7 @@ moves = [
   [ nil, 13, "G" ]
 ]
 
-last_position = moves.reduce(shogi_starting_position) do |position, move|
+last_position = moves.reduce(starting_position) do |position, move|
   position.call(move)
 end
 
