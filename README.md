@@ -1,8 +1,8 @@
-# <span lang="zh"><ruby>棋<rt>Qi</rt></ruby></span>.cr
+# Qi.cr
 
 [![Build Status](https://travis-ci.org/sashite/qi.cr.svg?branch=master)](https://travis-ci.org/sashite/qi.cr)
 
-> Instantiate [Portable Chess Notation](https://developer.sashite.com/specs/portable-chess-notation)'s positions and apply [Portable Move Notation](https://developer.sashite.com/specs/portable-move-notation)'s moves.
+> `Qi` (棋) is an abstraction for initializing and updating positions of chess variants (including Chess, Janggi, Markruk, Shogi, Xiangqi).
 
 ## Installation
 
@@ -35,6 +35,7 @@ starting_position = Qi::Position.new([
   "L", "N", "S", "G", "K", "G", "S", "N", "L"
 ])
 
+# List of moves in Portable Move Notation (https://developer.sashite.com/specs/portable-move-notation) format.
 moves = [
   [ 56, 47, "P" ],
   [ 3, 11, "g" ],
@@ -68,7 +69,7 @@ last_position.turn_to_topside? # => true
 
 ## License
 
-This library is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The code is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 ## About Sashite
 
