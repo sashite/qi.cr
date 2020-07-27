@@ -47,6 +47,7 @@ describe Qi::Position do
                                        "L", "N", "S", "G", "K", "G", "S", "N", "L"])
 
       last_position.bottomside_in_hand_pieces.should eq(["P"] of String)
+      last_position.in_hand_pieces.should eq([] of String)
       last_position.turn_to_topside?.should be_true
     end
   end

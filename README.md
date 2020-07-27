@@ -1,4 +1,4 @@
-# 棋.cr
+# <span lang="zh"><ruby>棋<rt>Qi</rt></ruby></span>.cr
 
 [![Build Status](https://travis-ci.org/sashite/qi.cr.svg?branch=master)](https://travis-ci.org/sashite/qi.cr)
 
@@ -62,6 +62,7 @@ last_position.squares # => ["l", "n", "s", "k", nil, nil, "s", "n", "l",
                       #     "L", "N", "S", "G", "K", "G", "S", "N", "L"]
 
 last_position.bottomside_in_hand_pieces # => ["P"]
+last_position.in_hand_pieces # => []
 last_position.turn_to_topside? # => true
 ```
 
