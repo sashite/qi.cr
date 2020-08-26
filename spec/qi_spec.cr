@@ -34,7 +34,7 @@ describe Qi::Position do
 
   describe "#to_s" do
     it "describes the last position" do
-      last_position.topside_in_hand_pieces.should eq([] of String)
+      last_position.pieces_in_hand_grouped_by_sides.should eq([["P"], [] of String])
 
       last_position.squares.should eq(["l", "n", "s", "k", nil, nil, "s", "n", "l",
                                        nil, "r", "g", nil, "G", "+B", nil, "b", nil,
@@ -46,9 +46,8 @@ describe Qi::Position do
                                        nil, nil, nil, nil, nil, nil, nil, "R", nil,
                                        "L", "N", "S", "G", "K", "G", "S", "N", "L"])
 
-      last_position.bottomside_in_hand_pieces.should eq(["P"] of String)
       last_position.in_hand_pieces.should eq([] of String)
-      last_position.turn_to_topside?.should be_true
+      last_position.active_side_id.should eq(1)
     end
   end
 end

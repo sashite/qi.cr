@@ -1,35 +1,37 @@
 module Qi
   # Position class.
+  #
+  # @see https://developer.sashite.com/specs/portable-chess-notation
   class Position
-    # The list of squares of on the board.
+    # Players are identified by a number according to the order in which they
+    #   traditionally play from the starting position.
+    #
+    # @!attribute [r] active_side_id
+    #   @return [Integer] The identifier of the player who must play.
+    getter :active_side_id
+
+    # The list of pieces in hand owned by players.
+    #
+    # @!attribute [r] pieces_in_hand_grouped_by_sides
+    #   @return [Array] The list of pieces in hand for each side.
+    getter :pieces_in_hand_grouped_by_sides
+
+    # The list of squares on the board.
     #
     # @!attribute [r] squares
-    #   @return [Array] The list of squares.
+    #   @return [Array] The list of squares on the board.
     getter :squares
 
-    # The list of pieces in hand owned by the bottomside player.
-    #
-    # @!attribute [r] bottomside_in_hand_pieces
-    #   @return [Array] The list of bottomside's pieces in hand.
-    getter :bottomside_in_hand_pieces
-
-    # The list of pieces in hand owned by the topside player.
-    #
-    # @!attribute [r] topside_in_hand_pieces
-    #   @return [Array] The list of topside's pieces in hand.
-    getter :topside_in_hand_pieces
-
+    @active_side_id : Int32
+    @pieces_in_hand_grouped_by_sides : Array(Array(String))
     @squares : Array(String?)
-    @is_turn_to_topside : Bool
-    @bottomside_in_hand_pieces : Array(String)
-    @topside_in_hand_pieces : Array(String)
 
     # Initialize a position.
     #
-    # @param squares [Array] The list of squares of on the board.
-    # @param is_turn_to_topside [Boolean] The player who must play.
-    # @param bottomside_in_hand_pieces [Array] The list of bottom-side's pieces in hand.
-    # @param topside_in_hand_pieces [Array] The list of top-side's pieces in hand.
+    # @param squares [Array] The list of squares on the board.
+    # @param active_side_id [Integer] The identifier of the player who must play.
+    # @param pieces_in_hand_grouped_by_sides [Array] The list of pieces in hand
+    #   grouped by players.
     #
     # @example Chess's starting position
     #   Position.new([
@@ -42,6 +44,30 @@ module Qi
     #     "♙", "♙", "♙", "♙", "♙", "♙", "♙", "♙",
     #     "♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"
     #   ])
+    #
+    # @example Four-player chess's starting position
+    #   Position.new([
+    #     nil , nil , nil , "yR", "yN", "yB", "yK", "yQ", "yB", "yN", "yR", nil , nil , nil ,
+    #     nil , nil , nil , "yP", "yP", "yP", "yP", "yP", "yP", "yP", "yP", nil , nil , nil ,
+    #     nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , nil ,
+    #     "bR", "bP", nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , "gP", "gR",
+    #     "bN", "bP", nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , "gP", "gN",
+    #     "bB", "bP", nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , "gP", "gB",
+    #     "bK", "bP", nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , "gP", "gQ",
+    #     "bQ", "bP", nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , "gP", "gK",
+    #     "bB", "bP", nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , "gP", "gB",
+    #     "bN", "bP", nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , "gP", "gN",
+    #     "bR", "bP", nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , "gP", "gR",
+    #     nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , nil , nil ,
+    #     nil , nil , nil , "rP", "rP", "rP", "rP", "rP", "rP", "rP", "rP", nil , nil , nil ,
+    #     nil , nil , nil , "rR", "rN", "rB", "rQ", "rK", "rB", "rN", "rR", nil , nil , nil],
+    #     pieces_in_hand_grouped_by_sides: [
+    #       [],
+    #       [],
+    #       [],
+    #       []
+    #     ]
+    #   )
     #
     # @example Makruk's starting position
     #   Position.new([
@@ -68,6 +94,23 @@ module Qi
     #     "L", "N", "S", "G", "K", "G", "S", "N", "L"
     #   ])
     #
+    # @example A classic Tsume Shogi problem
+    #   Position.new([
+    #     nil, nil, nil, "s", "k", "s", nil, nil, nil,
+    #     nil, nil, nil, nil, nil, nil, nil, nil, nil,
+    #     nil, nil, nil, nil, "+P", nil, nil, nil, nil,
+    #     nil, nil, nil, nil, nil, nil, nil, nil, nil,
+    #     nil, nil, nil, nil, nil, nil, nil, "+B", nil,
+    #     nil, nil, nil, nil, nil, nil, nil, nil, nil,
+    #     nil, nil, nil, nil, nil, nil, nil, nil, nil,
+    #     nil, nil, nil, nil, nil, nil, nil, nil, nil,
+    #     nil, nil, nil, nil, nil, nil, nil, nil, nil],
+    #     pieces_in_hand_grouped_by_sides: [
+    #       ["S"],
+    #       ["b", "g", "g", "g", "g", "n", "n", "n", "n", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "r", "r", "s"]
+    #     ]
+    #   )
+    #
     # @example Xiangqi's starting position
     #   Position.new([
     #     "車", "馬", "象", "士", "將", "士", "象", "馬", "車",
@@ -81,18 +124,20 @@ module Qi
     #     nil, nil, nil, nil, nil, nil, nil, nil, nil,
     #     "俥", "傌", "相", "仕", "帥", "仕", "相", "傌", "俥"
     #   ])
-    def initialize(@squares, *, @is_turn_to_topside = false, @bottomside_in_hand_pieces = [] of String, @topside_in_hand_pieces = [] of String)
+    def initialize(@squares, *, active_side_id = 0, @pieces_in_hand_grouped_by_sides = [[] of String, [] of String])
+      @active_side_id = active_side_id % @pieces_in_hand_grouped_by_sides.size
     end
 
-    # Apply a move in PMN (Portable Move Notation) format.
+    # Apply a move to the position.
     #
     # @param move [Array] The move to play.
     # @see https://developer.sashite.com/specs/portable-move-notation
+    # @see https://github.com/sashite/pmn.cr
+    #
     # @return [Position] The new position.
     def call(move)
       updated_squares = squares.dup
-      updated_bottomside_in_hand_pieces = bottomside_in_hand_pieces.dup
-      updated_topside_in_hand_pieces = topside_in_hand_pieces.dup
+      updated_in_hand_pieces = in_hand_pieces.dup
 
       actions = move.each_slice(4).to_a
 
@@ -103,13 +148,8 @@ module Qi
         captured_piece_name = action.fetch(3, nil).as(String?)
 
         if src_square_id.nil?
-          if turn_to_topside?
-            piece_in_hand_id = updated_topside_in_hand_pieces.index(moved_piece_name)
-            updated_topside_in_hand_pieces.delete_at(piece_in_hand_id) unless piece_in_hand_id.nil?
-          else
-            piece_in_hand_id = updated_bottomside_in_hand_pieces.index(moved_piece_name)
-            updated_bottomside_in_hand_pieces.delete_at(piece_in_hand_id) unless piece_in_hand_id.nil?
-          end
+          piece_in_hand_id = updated_in_hand_pieces.index(moved_piece_name)
+          updated_in_hand_pieces.delete_at(piece_in_hand_id) unless piece_in_hand_id.nil?
         else
           updated_squares[src_square_id] = nil
         end
@@ -117,33 +157,24 @@ module Qi
         updated_squares[dst_square_id] = moved_piece_name
 
         unless captured_piece_name.nil?
-          if turn_to_topside?
-            updated_topside_in_hand_pieces.push(captured_piece_name)
-          else
-            updated_bottomside_in_hand_pieces.push(captured_piece_name)
-          end
+          updated_in_hand_pieces.push(captured_piece_name)
         end
       end
 
+      updated_pieces_in_hand_grouped_by_sides = pieces_in_hand_grouped_by_sides.dup
+      updated_pieces_in_hand_grouped_by_sides[active_side_id] = updated_in_hand_pieces
+
       self.class.new(updated_squares,
-        is_turn_to_topside: !turn_to_topside?,
-        bottomside_in_hand_pieces: updated_bottomside_in_hand_pieces,
-        topside_in_hand_pieces: updated_topside_in_hand_pieces)
+        active_side_id: active_side_id.succ,
+        pieces_in_hand_grouped_by_sides: updated_pieces_in_hand_grouped_by_sides
+      )
     end
 
     # The list of pieces in hand owned by the current player.
     #
-    # @return [Array] Topside's pieces in hand if turn to topside, bottomside's
-    #   ones otherwise.
+    # @return [Array] The list of pieces in hand of the active side.
     def in_hand_pieces
-      turn_to_topside? ? topside_in_hand_pieces : bottomside_in_hand_pieces
-    end
-
-    # The side who must play.
-    #
-    # @return [Boolean] True if it is turn to topside, false otherwise.
-    def turn_to_topside?
-      @is_turn_to_topside
+      pieces_in_hand_grouped_by_sides[active_side_id]
     end
   end
 end
