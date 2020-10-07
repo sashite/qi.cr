@@ -1,53 +1,105 @@
 require "./spec_helper"
 require "json"
 
-describe Qi::Position do
-  squares = [
-    "l", "n", "s", "g", "k", "g", "s", "n", "l",
-    nil, "r", nil, nil, nil, nil, nil, "b", nil,
-    "p", "p", "p", "p", "p", "p", "p", "p", "p",
-    nil, nil, nil, nil, nil, nil, nil, nil, nil,
-    nil, nil, nil, nil, nil, nil, nil, nil, nil,
-    nil, nil, nil, nil, nil, nil, nil, nil, nil,
-    "P", "P", "P", "P", "P", "P", "P", "P", "P",
-    nil, "B", nil, nil, nil, nil, nil, "R", nil,
-    "L", "N", "S", "G", "K", "G", "S", "N", "L",
-  ]
+describe Qi do
+  describe ".call" do
+    context "with a very short Shogi game" do
+      in_hand = %w()
 
-  starting_position =
-    Qi::Position.new(squares)
+      square = {
+         0 => "l",
+         1 => "n",
+         2 => "s",
+         3 => "g",
+         4 => "k",
+         5 => "g",
+         6 => "s",
+         7 => "n",
+         8 => "l",
+        10 => "r",
+        16 => "b",
+        18 => "p",
+        19 => "p",
+        20 => "p",
+        21 => "p",
+        22 => "p",
+        23 => "p",
+        24 => "p",
+        25 => "p",
+        26 => "p",
+        54 => "P",
+        55 => "P",
+        56 => "P",
+        57 => "P",
+        58 => "P",
+        59 => "P",
+        60 => "P",
+        61 => "P",
+        62 => "P",
+        64 => "B",
+        70 => "R",
+        72 => "L",
+        73 => "N",
+        74 => "S",
+        75 => "G",
+        76 => "K",
+        77 => "G",
+        78 => "S",
+        79 => "N",
+        80 => "L",
+      }
 
-  moves = [
-    [56, 47, "P"],
-    [3, 11, "g"],
-    [64, 24, "+B", "P"],
-    [5, 14, "g"],
-    [24, 14, "+B", "G"],
-    [4, 3, "k"],
-    [nil, 13, "G"],
-  ]
+      starting_position_piece_set = {in_hand: in_hand, square: square}
 
-  last_position =
-    moves.reduce(starting_position) do |position, move|
-      position.call(move)
+      moves = [
+        [56, 47, "P"], [3, 11, "g", nil],
+        [64, 24, "+B", "P"], [5, 14, "g", nil],
+        [24, 14, "+B", "G"], [4, 3, "k", nil],
+        [nil, 13, "G", nil],
+      ]
+
+      last_piece_set =
+        moves.reduce(starting_position_piece_set) do |piece_set, move|
+          Qi.call(move, **piece_set)
+        end
+
+      it "describes the last piece set" do
+        last_piece_set.should eq({
+          in_hand: %w(P),
+          square:  {0 => "l", 1 => "n", 2 => "s", 6 => "s", 7 => "n", 8 => "l", 10 => "r", 16 => "b", 18 => "p", 19 => "p", 20 => "p", 21 => "p", 22 => "p", 23 => "p", 25 => "p", 26 => "p", 54 => "P", 55 => "P", 57 => "P", 58 => "P", 59 => "P", 60 => "P", 61 => "P", 62 => "P", 70 => "R", 72 => "L", 73 => "N", 74 => "S", 75 => "G", 76 => "K", 77 => "G", 78 => "S", 79 => "N", 80 => "L", 47 => "P", 11 => "g", 14 => "+B", 3 => "k", 13 => "G"},
+        })
+      end
     end
 
-  describe "#to_s" do
-    it "describes the last position" do
-      last_position.pieces_in_hand_grouped_by_sides.should eq([["P"], [] of String])
+    context "with a classic Shogi problem" do
+      in_hand = %w(S r r b g g g g s n n n n p p p p p p p p p p p p p p p p p)
 
-      last_position.squares.should eq(["l", "n", "s", "k", nil, nil, "s", "n", "l",
-                                       nil, "r", "g", nil, "G", "+B", nil, "b", nil,
-                                       "p", "p", "p", "p", "p", "p", nil, "p", "p",
-                                       nil, nil, nil, nil, nil, nil, nil, nil, nil,
-                                       nil, nil, nil, nil, nil, nil, nil, nil, nil,
-                                       nil, nil, "P", nil, nil, nil, nil, nil, nil,
-                                       "P", "P", nil, "P", "P", "P", "P", "P", "P",
-                                       nil, nil, nil, nil, nil, nil, nil, "R", nil,
-                                       "L", "N", "S", "G", "K", "G", "S", "N", "L"])
+      square = {
+         3 => "s",
+         4 => "k",
+         5 => "s",
+        22 => "+P",
+        43 => "+B",
+      }
 
-      last_position.in_hand_pieces.should eq([] of String)
-      last_position.active_side_id.should eq(1)
+      starting_position_piece_set = {in_hand: in_hand, square: square}
+
+      moves = [
+        [43, 13, "+B", nil], [5, 13, "s", "b"],
+        [nil, 14, "S", nil],
+      ]
+
+      last_piece_set =
+        moves.reduce(starting_position_piece_set) do |piece_set, move|
+          Qi.call(move, **piece_set)
+        end
+
+      it "describes the last piece set" do
+        last_piece_set.should eq({
+          in_hand: %w(r r b g g g g s n n n n p p p p p p p p p p p p p p p p p b),
+          square:  {3 => "s", 4 => "k", 22 => "+P", 13 => "s", 14 => "S"},
+        })
+      end
     end
   end
 end
